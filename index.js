@@ -32,6 +32,6 @@ function kirim(nama, khodam) {
     };
   
     req.send(JSON.stringify(data));
-    console.log('berhasil');
+    // console.log('berhasil');
   }
   
