@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Khodam</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            
+        }
+        .container {
+            background-image: url('foto.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            /* background-position-y: ; */
+            background-size: 80%;
+
+            padding: 20px;
+            background-color: #dee2e6;
+            margin: 50px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 80vh;
+        }
+        .barisdalam{
+            background-color: rgba(255, 255, 255, 0.9);
+            margin: 10px;
+            padding: 20px;
+
+            
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center ">
+            <div class="col-md-6 barisdalam">
+                <h1 class="text-center">Cek Khodam</h1>
+                <form id="cekKhodamForm">
+                    <div class="form-group">
+                        <label for="nama">Nama</label>
+                        <input type="text" class="form-control" id="nama" placeholder="Masukkan nama Anda" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Cek Khodam</button>
+                </form>
+                <div id="result" class="result d-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const daftarKhodam= [
+    "Macan Putih", "Harimau", "Kucing", "Anjing", "Gajah", "Kuda", "Burung Hantu", "Elang", "Naga", "Ikan Mas",
+    "Kupu-kupu", "Lebah", "Kalajengking", "Kera", "Ular", "Buaya", "Badak", "Rusa", "Beruang", "Kambing",
+    "Ayam Jago", "Merpati", "Gorila", "Laba-laba", "Ikan Hiu", "Ikan Paus", "Kelelawar", "Domba", "Singa", "Zebra",
+    "Penguin", "Paus Orca", "Rubah", "Kelinci", "Serigala", "Banteng", "Angsa", "Kura-kura", "Panda", "Babi",
+    "Jerapah", "Belalang", "Semut", "Katak", "Cicak", "Landak", "Siput", "Kumbang", "Tokek", "Tikus", "Belut",
+    "Gurita", "Bintang Laut", "Kuda Laut", "Kepiting", "Udang", "Lobster", "Lumba-lumba", "Kerang", "Kerbau",
+    "Lalat", "Nyamuk", "Cacing", "Tawon", "Ulat", "Kanguru", "Koala", "Berang-berang", "Orangutan", "Simba",
+    "Jaguar", "Tarantula", "Nemo", "Dory", "Kiwi", "Tasmania", "Piranha", "Kakatua", "Betet", "Flamingo",
+    "Burung Merak", "Burung Jalak", "Burung Cendrawasih", "Burung Pelikan", "Burung Kenari", "Burung Lovebird",
+    "Burung Nuri", "Burung Dara", "Gagak", "Burung Elang", "Burung Garuda", "Burung Hantu Salju", "Burung Kolibri",
+    "Burung Raja Udang", "Burung Robin", "Burung Sikatan", "Burung Walet", "Kuda Nil", "Cheetah", "Leopard",
+    "Rakun", "Serigala Kutub", "Lemur", "Puma", "Tapir", "Owa", "Gorila Punggung Perak", "Babun", "Mandrill",
+    "Simpa", "Armadillo", "Kucing Hutan", "Linsang", "Musang", "Sigung", "Opossum", "Platipus", "Dugong",
+    "Lumba-lumba Pink", "Burung Unta", "Kasuar", "Rhea", "Emu", "Burung Kiwi", "Iguana", "Komodo", "Biawak",
+    "Chameleon", "Gecko", "Buaya Muara", "Kura-kura Galapagos", "Kura-kura Raksasa", "Kura-kura Matahari",
+    "Penyu Belimbing", "Penyu Hijau", "Tuntong Laut", "Penyu Sisik", "Anakonda", "Piton", "Sanca", "Cobra",
+    "Viper", "Mamba", "Rattlesnake", "Ular Laut", "Ular Pelangi", "Katak Pohon", "Katak Merah", "Katak Hijau",
+    "Katak Emas", "Katak Panah Beracun", "Ikan Pari", "Ikan Kerapu", "Ikan Napoleon", "Ikan Buntal", "Ikan Arwana",
+    "Ikan Cupang", "Ikan Koi", "Ikan Discus", "Ikan Guppy", "Ikan Molly", "Ikan Platy", "Ikan Zebra", "Ikan Neon Tetra",
+    "Ikan Komet", "Ikan Mas Koki", "Ikan Lohan", "Ikan Oscar", "Ikan Bala Shark", "Ikan Sumatera", "Ikan Bidadari",
+    "Ikan Manfish", "Ikan Pleco", "Ikan Botia", "Ikan Barb", "Ikan Corydoras", "Ikan Tetra", "Ikan Rasbora",
+    "Ikan Gourami", "Ikan Sepat", "Ikan Cichlid", "Ikan Kakap", "Ikan Tuna", "Ikan Tenggiri", "Ikan Kembung",
+    "Ikan Layur", "Ikan Kerapu", "Ikan Belida", "Ikan Gabus", "Ikan Baung", "Ikan Patin", "Ikan Nila", "Ikan Mujair",
+    "Ikan Lele", "Ikan Betutu", "Ikan Bandeng", "Ikan Gurame", "Ikan Sidat", "Ikan Mas", "Ikan Lundu", "Ikan Sapu-sapu",
+    "Ikan Kakatua", "Ikan Napoleon", "Panci", "Wajan", "Spatula", "Sendok", "Garpu", "Pisau", "Talenan", "Blender",
+    "Kompor", "Oven", "Mixer", "Mikrowave", "Kulkas", "Freezer", "Rice Cooker", "Panci Presto", "Teflon",
+    "Ketel", "Panci Kukus", "Saringan", "Parutan", "Baskom", "Piring", "Gelas", "Cangkir", "Teko", "Dispenser",
+    "Kipas Angin", "AC", "Televisi", "Radio", "Komputer", "Laptop", "Printer", "Scanner", "Telepon", "Smartphone",
+    "Tablet", "Kamera", "Proyektor", "DVD Player", "PlayStation", "Xbox", "Nintendo", "Lampu", "Baterai",
+    "Charger", "Earphone", "Speaker", "Headphone", "Kabel", "Adaptor", "USB", "Hard Disk", "Mouse", "Keyboard"
+  ]
+
+
+
+  let nama2 = '';
+  let hasil2 = '';
+        document.getElementById('cekKhodamForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const nama = document.getElementById('nama').value;
+            if (nama == nama2){
+                const randomIndex = Math.floor(Math.random() * daftarKhodam.length);
+                const khodam = hasil2;
+                document.getElementById('result').innerHTML = `<strong>Nama:</strong> ${nama}<br><strong>Khodam Anda:</strong> ${khodam}`;
+                document.getElementById('result').classList.remove('d-none');
+                console.log(nama2);
+                nama2 = nama;
+                hasil2 = khodam;
+                
+                console.log("benar");
+                console.log(nama2);
+                console.log(hasil2);
+                console.log(nama);
+                console.log(khodam);
+            }
+            else{
+                // const nama = document.getElementById('nama').value;
+                const randomIndex = Math.floor(Math.random() * daftarKhodam.length);
+                const khodam = daftarKhodam[randomIndex];
+                document.getElementById('result').innerHTML = `<strong>Nama:</strong> ${nama}<br><strong>Khodam Anda:</strong> ${khodam}`;
+                document.getElementById('result').classList.remove('d-none');
+                console.log(nama2);
+                nama2 = nama;
+                hasil2 = khodam;
+                console.log("sALAJ");
+                console.log(nama2);
+                console.log(hasil2);
+                console.log(nama);
+                console.log(khodam);
+            }
+        });
+    </script>
+</body>
+</html>
